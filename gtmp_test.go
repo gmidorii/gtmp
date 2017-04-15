@@ -46,7 +46,7 @@ func TestDefaultServer(t *testing.T) {
 	}
 }
 
-func TestSwitchLangJava(t *testing.T) {
+func TestSwitchLang_Java(t *testing.T) {
 	lang := "java"
 	l, err := switchLang(lang)
 	if err != nil {
@@ -57,5 +57,14 @@ func TestSwitchLangJava(t *testing.T) {
 	default:
 		t.Error("switch failed")
 		t.Log(v)
+	}
+}
+
+func TestSwitchLang_NotCompativle(t *testing.T) {
+	lang := "swift"
+	l, err := switchLang(lang)
+	if err == nil {
+		t.Error(err)
+		t.Log(l)
 	}
 }
