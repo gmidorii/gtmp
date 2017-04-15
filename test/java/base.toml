@@ -1,0 +1,10 @@
+package = "house"
+class = "Watch"
+methods = [
+  "search",
+  "select"
+]
+injects = [
+  "TestImpl",
+  "HogeClientImpl"
+]

@@ -1,4 +1,13 @@
 {
-    "memo": "",
-    "projects": []
+    "memo": "670e00c4158484f451735327ef33e24c1cf8be1f41f47f664dd2ca4752bd7a40",
+    "projects": [
+        {
+            "name": "github.com/BurntSushi/toml",
+            "version": "v0.3.0",
+            "revision": "b26d9c308763d68093482582cea63d69be07a0f0",
+            "packages": [
+                "."
+            ]
+        }
+    ]
 }
