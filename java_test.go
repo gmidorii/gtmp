@@ -1,30 +1,40 @@
 package main
 
-import "testing"
+import (
+	"bytes"
+	"io/ioutil"
+	"testing"
+)
+
+func TestCreate(t *testing.T) {
+	java := Java{
+		c: Config{
+			resource: "./test/java/base.toml",
+			temp:     "./test/java/template.java",
+		},
+		part: create(),
+	}
+
+	stdOut := new(bytes.Buffer)
+	java.Create(stdOut)
+
+	file, err := ioutil.ReadFile("./test/java/impl.java")
+	if err != nil {
+		t.Error(err)
+	}
+
+	if string(file) != stdOut.String() {
+		t.Error("create template file failed")
+	}
+}
 
 func TestCreateParts(t *testing.T) {
-	m := []string{
-		"search",
-		"select",
-	}
-
-	i := []string{
-		"TestImpl",
-		"HogeClientImpl",
-	}
-
-	expected := Parts{
-		Package: "house",
-		Class:   "Watch",
-		Methods: m,
-		Injects: i,
-	}
-
 	actual, err := createParts("./test/java/base.toml")
 	if err != nil {
 		t.Error(err)
 	}
 
+	expected := create()
 	if expected.Package != actual.Package {
 		t.Error("create parts Package failed")
 		t.Log(expected)
@@ -81,4 +91,23 @@ func equalSlice(a, b []string) bool {
 		}
 	}
 	return true
+}
+
+func create() Parts {
+	m := []string{
+		"search",
+		"select",
+	}
+
+	i := []string{
+		"TestImpl",
+		"HogeClientImpl",
+	}
+
+	return Parts{
+		Package: "house",
+		Class:   "Watch",
+		Methods: m,
+		Injects: i,
+	}
 }
