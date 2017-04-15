@@ -1,8 +1,8 @@
 package main
 
 import (
+	"html/template"
 	"io"
-	"io/ioutil"
 
 	"github.com/BurntSushi/toml"
 )
@@ -20,17 +20,17 @@ type Parts struct {
 }
 
 func (j *Java) Create(w io.Writer) error {
-	_, err := ioutil.ReadFile(j.c.temp)
+	parts, err := createParts(j.c.resource)
 	if err != nil {
 		return err
 	}
 
-	var parts Parts
-	_, err = toml.DecodeFile(j.c.resource, &parts)
+	t := template.New("java test")
+	t, err = template.ParseFiles(j.c.temp)
 	if err != nil {
 		return err
 	}
-	return nil
+	return t.Execute(w, parts)
 }
 
 func NewJava(config Config) (Language, error) {
