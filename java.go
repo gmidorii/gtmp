@@ -1,6 +1,6 @@
 package main
 
-type Base struct {
+type Java struct {
 	Package string
 	Class   string
 	Methods []Method
@@ -15,10 +15,10 @@ type Inject struct {
 	inject string
 }
 
-func (b Base) Create() error {
+func (b *Java) Create() error {
 	return nil
 }
 
-func NewJava(lang string) (Language, error) {
-	return &Base{}, nil
+func NewJava() (Language, error) {
+	return &Java{}, nil
 }

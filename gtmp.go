@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"flag"
 	"log"
 )
@@ -9,28 +10,37 @@ type Language interface {
 	Create() error
 }
 
-type Server struct {
+type Parser struct {
 	Language Language
 }
 
-func (s *Server) Start() error {
-	return s.Language.Create()
+func (p *Parser) Do() error {
+	return p.Language.Create()
 }
 
 func main() {
 	lang := *flag.String("l", "java", "select creating template language")
 	flag.Parse()
 
-	l, err := NewJava(lang)
+	l, err := switchLang(lang)
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	server := Server{
+	parser := Parser{
 		Language: l,
 	}
 
-	if err := server.Start(); err != nil {
+	if err := parser.Do(); err != nil {
 		log.Fatalln(err)
+	}
+}
+
+func switchLang(lang string) (Language, error) {
+	switch lang {
+	case "java":
+		return NewJava()
+	default:
+		return nil, errors.New("Not Compatible. Language: " + lang)
 	}
 }

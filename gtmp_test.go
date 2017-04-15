@@ -1,7 +1,9 @@
 package main
 
-import "testing"
-import "errors"
+import (
+	"errors"
+	"testing"
+)
 
 type FakeLang struct {
 	Fake Language
@@ -9,7 +11,7 @@ type FakeLang struct {
 
 func (f *FakeLang) Create() error {
 	switch f.Fake.(type) {
-	case *Base:
+	case *Java:
 		return nil
 	default:
 		return errors.New("language error")
@@ -18,12 +20,12 @@ func (f *FakeLang) Create() error {
 
 func TestJavaServer(t *testing.T) {
 	javaLang := &FakeLang{
-		Fake: &Base{},
+		Fake: &Java{},
 	}
-	server := &Server{
+	server := &Parser{
 		Language: javaLang,
 	}
-	err := server.Start()
+	err := server.Do()
 	if err != nil {
 		t.Error("Failed server")
 		t.Log()
@@ -34,12 +36,26 @@ func TestDefaultServer(t *testing.T) {
 	nilLang := &FakeLang{
 		Fake: nil,
 	}
-	server := &Server{
+	server := &Parser{
 		Language: nilLang,
 	}
-	err := server.Start()
+	err := server.Do()
 	if err.Error() != "language error" {
 		t.Error("Failed server")
 		t.Log()
+	}
+}
+
+func TestSwitchLangJava(t *testing.T) {
+	lang := "java"
+	l, err := switchLang(lang)
+	if err != nil {
+		t.Error(err)
+	}
+	switch v := l.(type) {
+	case *Java:
+	default:
+		t.Error("switch failed")
+		t.Log(v)
 	}
 }
