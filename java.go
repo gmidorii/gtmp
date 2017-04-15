@@ -1,6 +1,11 @@
 package main
 
 type Java struct {
+	c    Config
+	part Parts
+}
+
+type Parts struct {
 	Package string
 	Class   string
 	Methods []Method
@@ -15,10 +20,12 @@ type Inject struct {
 	inject string
 }
 
-func (b *Java) Create() error {
+func (j *Java) Create() error {
 	return nil
 }
 
-func NewJava() (Language, error) {
-	return &Java{}, nil
+func NewJava(config Config) (Language, error) {
+	return &Java{
+		c: config,
+	}, nil
 }

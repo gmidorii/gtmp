@@ -68,3 +68,22 @@ func TestSwitchLang_NotCompativle(t *testing.T) {
 		t.Log(l)
 	}
 }
+
+func TestSwitchLang_SetConfig(t *testing.T) {
+	lang := "java"
+	l, err := switchLang(lang)
+	if err != nil {
+		t.Error(err)
+	}
+	j, ok := l.(*Java)
+	if ok != true {
+		t.Error(ok)
+	}
+	exp := Config{
+		resource: "./resources/java/base.toml",
+		temp:     "./template/java/test.java",
+	}
+	if exp != j.c {
+		t.Error("config setting failed")
+	}
+}

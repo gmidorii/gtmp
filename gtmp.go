@@ -10,6 +10,11 @@ type Language interface {
 	Create() error
 }
 
+type Config struct {
+	resource string
+	temp     string
+}
+
 type Parser struct {
 	Language Language
 }
@@ -37,9 +42,13 @@ func main() {
 }
 
 func switchLang(lang string) (Language, error) {
+	c := Config{
+		resource: "./resources/" + lang + "/base.toml",
+	}
 	switch lang {
 	case "java":
-		return NewJava()
+		c.temp = "./template/java/test.java"
+		return NewJava(c)
 	default:
 		return nil, errors.New("Not Compatible. Language: " + lang)
 	}
