@@ -9,7 +9,7 @@ import (
 )
 
 type Language interface {
-	Create(w io.Writer) error
+	create(w io.Writer) error
 }
 
 type Config struct {
@@ -22,7 +22,7 @@ type Parser struct {
 }
 
 func (p *Parser) Do(w io.Writer) error {
-	return p.Language.Create(w)
+	return p.Language.create(w)
 }
 
 func main() {
@@ -50,7 +50,7 @@ func switchLang(lang string) (Language, error) {
 	switch lang {
 	case "java":
 		c.temp = "./template/java/test.java"
-		return NewJava(c)
+		return java(c)
 	default:
 		return nil, errors.New("Not Compatible. Language: " + lang)
 	}

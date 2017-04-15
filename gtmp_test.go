@@ -11,7 +11,7 @@ type FakeLang struct {
 	Fake Language
 }
 
-func (f *FakeLang) Create(w io.Writer) error {
+func (f *FakeLang) create(w io.Writer) error {
 	switch f.Fake.(type) {
 	case *Java:
 		return nil

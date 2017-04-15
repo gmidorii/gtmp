@@ -16,7 +16,7 @@ func TestCreate(t *testing.T) {
 	}
 
 	stdOut := new(bytes.Buffer)
-	java.Create(stdOut)
+	java.create(stdOut)
 
 	file, err := ioutil.ReadFile("./test/java/impl.java")
 	if err != nil {

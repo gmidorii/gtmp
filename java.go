@@ -19,7 +19,7 @@ type Parts struct {
 	Injects []string
 }
 
-func (j *Java) Create(w io.Writer) error {
+func (j *Java) create(w io.Writer) error {
 	parts, err := createParts(j.c.resource)
 	if err != nil {
 		return err
@@ -33,7 +33,7 @@ func (j *Java) Create(w io.Writer) error {
 	return t.Execute(w, parts)
 }
 
-func NewJava(config Config) (Language, error) {
+func java(config Config) (Language, error) {
 	return &Java{
 		c: config,
 	}, nil
