@@ -1,0 +1,7 @@
+test:
+  pre:
+    - echo "-----start test-----"
+  override:
+    - go test -cover
+  post:
+    - echo "-----end test-----"
