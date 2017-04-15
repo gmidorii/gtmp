@@ -3,11 +3,13 @@ package main
 import (
 	"errors"
 	"flag"
+	"io"
 	"log"
+	"os"
 )
 
 type Language interface {
-	Create() error
+	Create(w io.Writer) error
 }
 
 type Config struct {
@@ -19,8 +21,8 @@ type Parser struct {
 	Language Language
 }
 
-func (p *Parser) Do() error {
-	return p.Language.Create()
+func (p *Parser) Do(w io.Writer) error {
+	return p.Language.Create(w)
 }
 
 func main() {
@@ -36,7 +38,7 @@ func main() {
 		Language: l,
 	}
 
-	if err := parser.Do(); err != nil {
+	if err := parser.Do(os.Stdout); err != nil {
 		log.Fatalln(err)
 	}
 }

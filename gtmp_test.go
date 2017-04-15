@@ -2,6 +2,8 @@ package main
 
 import (
 	"errors"
+	"io"
+	"os"
 	"testing"
 )
 
@@ -9,7 +11,7 @@ type FakeLang struct {
 	Fake Language
 }
 
-func (f *FakeLang) Create() error {
+func (f *FakeLang) Create(w io.Writer) error {
 	switch f.Fake.(type) {
 	case *Java:
 		return nil
@@ -25,7 +27,7 @@ func TestJavaServer(t *testing.T) {
 	server := &Parser{
 		Language: javaLang,
 	}
-	err := server.Do()
+	err := server.Do(os.Stdout)
 	if err != nil {
 		t.Error("Failed server")
 		t.Log()
@@ -39,7 +41,7 @@ func TestDefaultServer(t *testing.T) {
 	server := &Parser{
 		Language: nilLang,
 	}
-	err := server.Do()
+	err := server.Do(os.Stdout)
 	if err.Error() != "language error" {
 		t.Error("Failed server")
 		t.Log()
