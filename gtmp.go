@@ -33,9 +33,15 @@ func main() {
 	lang := *flag.String("l", "java", "select creating template language")
 	flag.Parse()
 
+	if err := run(lang); err != nil {
+		log.Fatal(err)
+	}
+}
+
+func run(lang string) error {
 	l, c, err := switchLang(lang)
 	if err != nil {
-		log.Fatalln(err)
+		return err
 	}
 
 	parser := Parser{
@@ -44,17 +50,15 @@ func main() {
 
 	r, err := readResource(c.resource)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
 	t, err := template.ParseFiles(c.temp)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
-	if err := parser.Do(os.Stdout, string(r), t); err != nil {
-		log.Fatalln(err)
-	}
+	return parser.Do(os.Stdout, string(r), t)
 }
 
 func switchLang(lang string) (Language, Config, error) {
