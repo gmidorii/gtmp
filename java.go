@@ -1,8 +1,8 @@
 package main
 
 import (
-	"html/template"
 	"io"
+	"text/template"
 
 	"github.com/BurntSushi/toml"
 )
@@ -19,29 +19,17 @@ type Parts struct {
 	Injects []string
 }
 
-func (j *Java) create(w io.Writer) error {
-	parts, err := createParts(j.c.resource)
-	if err != nil {
-		return err
-	}
-
-	t := template.New("java test")
-	t, err = template.ParseFiles(j.c.temp)
+func (j *Java) create(w io.Writer, r string, t *template.Template) error {
+	parts, err := createParts(r)
 	if err != nil {
 		return err
 	}
 	return t.Execute(w, parts)
 }
 
-func java(config Config) (Language, error) {
-	return &Java{
-		c: config,
-	}, nil
-}
-
-func createParts(filename string) (Parts, error) {
+func createParts(r string) (Parts, error) {
 	var parts Parts
-	_, err := toml.DecodeFile(filename, &parts)
+	_, err := toml.Decode(r, &parts)
 	if err != nil {
 		return Parts{}, err
 	}

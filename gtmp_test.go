@@ -5,13 +5,14 @@ import (
 	"io"
 	"os"
 	"testing"
+	"text/template"
 )
 
 type FakeLang struct {
 	Fake Language
 }
 
-func (f *FakeLang) create(w io.Writer) error {
+func (f *FakeLang) create(w io.Writer, r string, t *template.Template) error {
 	switch f.Fake.(type) {
 	case *Java:
 		return nil
@@ -27,7 +28,7 @@ func TestJavaServer(t *testing.T) {
 	server := &Parser{
 		Language: javaLang,
 	}
-	err := server.Do(os.Stdout)
+	err := server.Do(os.Stdout, "", template.New("tmp"))
 	if err != nil {
 		t.Error("Failed server")
 		t.Log()
@@ -41,7 +42,7 @@ func TestDefaultServer(t *testing.T) {
 	server := &Parser{
 		Language: nilLang,
 	}
-	err := server.Do(os.Stdout)
+	err := server.Do(os.Stdout, "", template.New("tmp"))
 	if err.Error() != "language error" {
 		t.Error("Failed server")
 		t.Log()
@@ -50,7 +51,7 @@ func TestDefaultServer(t *testing.T) {
 
 func TestSwitchLang_Java(t *testing.T) {
 	lang := "java"
-	l, err := switchLang(lang)
+	l, _, err := switchLang(lang)
 	if err != nil {
 		t.Error(err)
 	}
@@ -64,28 +65,40 @@ func TestSwitchLang_Java(t *testing.T) {
 
 func TestSwitchLang_NotCompativle(t *testing.T) {
 	lang := "swift"
-	l, err := switchLang(lang)
+	l, _, err := switchLang(lang)
 	if err == nil {
 		t.Error(err)
 		t.Log(l)
 	}
 }
 
-func TestSwitchLang_SetConfig(t *testing.T) {
+func TestSwitchLang_GetConfig(t *testing.T) {
 	lang := "java"
-	l, err := switchLang(lang)
+	_, c, err := switchLang(lang)
 	if err != nil {
 		t.Error(err)
-	}
-	j, ok := l.(*Java)
-	if ok != true {
-		t.Error(ok)
 	}
 	exp := Config{
 		resource: "./resources/java/base.toml",
 		temp:     "./template/java/test.java",
 	}
-	if exp != j.c {
+	if exp != c {
 		t.Error("config setting failed")
+	}
+}
+
+func TestReadResouce(t *testing.T) {
+	r, err := readResource("./test/read.txt")
+	if err != nil {
+		t.Error(err)
+	}
+
+	exp := `test
+test test`
+
+	if r != exp {
+		t.Error("Read File Failed")
+		t.Log(exp)
+		t.Log(r)
 	}
 }

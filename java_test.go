@@ -3,7 +3,9 @@ package main
 import (
 	"bytes"
 	"io/ioutil"
+	"log"
 	"testing"
+	"text/template"
 )
 
 func TestCreate(t *testing.T) {
@@ -15,8 +17,14 @@ func TestCreate(t *testing.T) {
 		part: create(),
 	}
 
+	r, _ := readResource(c.resource)
+	tmp, err := template.ParseFiles(c.temp)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	stdOut := new(bytes.Buffer)
-	java.create(stdOut)
+	java.create(stdOut, r, tmp)
 
 	file, err := ioutil.ReadFile("./test/java/impl.java")
 	if err != nil {
@@ -29,7 +37,8 @@ func TestCreate(t *testing.T) {
 }
 
 func TestCreateParts(t *testing.T) {
-	actual, err := createParts("./test/java/base.toml")
+	r, _ := readResource("./test/java/base.toml")
+	actual, err := createParts(r)
 	if err != nil {
 		t.Error(err)
 	}
