@@ -17,6 +17,7 @@ type Language interface {
 type Config struct {
 	resource string
 	temp     string
+	w        string
 }
 
 type Parser struct {
@@ -58,7 +59,12 @@ func run(lang string) error {
 		return err
 	}
 
-	return parser.Do(os.Stdout, string(r), t)
+	w, err := os.Create(c.w)
+	if err != nil {
+		return err
+	}
+
+	return parser.Do(w, string(r), t)
 }
 
 func switchLang(lang string) (Language, Config, error) {
@@ -68,6 +74,7 @@ func switchLang(lang string) (Language, Config, error) {
 	switch lang {
 	case "java":
 		config.temp = "./template/java/test.java"
+		config.w = "./result/result.java"
 		return &Java{}, config, nil
 	default:
 		return nil, Config{}, errors.New("Not Compatible. Language: " + lang)
