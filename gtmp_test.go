@@ -81,6 +81,7 @@ func TestSwitchLang_GetConfig(t *testing.T) {
 	exp := Config{
 		resource: "./resources/java/base.toml",
 		temp:     "./template/java/test.java",
+		w:        "./result/result.java",
 	}
 	if exp != c {
 		t.Error("config setting failed")
