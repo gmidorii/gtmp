@@ -2,8 +2,11 @@ gtmp
 
 vendor/
 
-template/
-resources/
+template/*
+resources/*
+result/*
+
+!.gitkeep
 
 # Intellij
 .idea
