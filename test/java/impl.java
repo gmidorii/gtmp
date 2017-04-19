@@ -1,6 +1,6 @@
-package house.WatchTest
+package house.TestTest
 
-public class WatchTest {
+public class TestTest {
 
   private TestImpl
 

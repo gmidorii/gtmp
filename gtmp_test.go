@@ -2,8 +2,6 @@ package main
 
 import (
 	"errors"
-	"io"
-	"os"
 	"testing"
 	"text/template"
 )
@@ -12,7 +10,7 @@ type FakeLang struct {
 	Fake Language
 }
 
-func (f *FakeLang) create(w io.Writer, r string, t *template.Template) error {
+func (f *FakeLang) create(r string, t *template.Template) error {
 	switch f.Fake.(type) {
 	case *Java:
 		return nil
@@ -28,7 +26,7 @@ func TestJavaServer(t *testing.T) {
 	server := &Parser{
 		Language: javaLang,
 	}
-	err := server.Do(os.Stdout, "", template.New("tmp"))
+	err := server.Do("", template.New("tmp"))
 	if err != nil {
 		t.Error("Failed server")
 		t.Log()
@@ -42,7 +40,7 @@ func TestDefaultServer(t *testing.T) {
 	server := &Parser{
 		Language: nilLang,
 	}
-	err := server.Do(os.Stdout, "", template.New("tmp"))
+	err := server.Do("", template.New("tmp"))
 	if err.Error() != "language error" {
 		t.Error("Failed server")
 		t.Log()
@@ -81,7 +79,6 @@ func TestSwitchLang_GetConfig(t *testing.T) {
 	exp := Config{
 		resource: "./resources/java/base.toml",
 		temp:     "./template/java/test.java",
-		w:        "./result/result.java",
 	}
 	if exp != c {
 		t.Error("config setting failed")

@@ -1,5 +1,5 @@
 package = "house"
-class = "Watch"
+class = "Test"
 methods = [
   "search",
   "select"

@@ -1,11 +1,11 @@
 package main
 
 import (
-	"bytes"
 	"io/ioutil"
 	"log"
 	"testing"
 	"text/template"
+	"os"
 )
 
 func TestCreate(t *testing.T) {
@@ -23,17 +23,25 @@ func TestCreate(t *testing.T) {
 		log.Fatal(err)
 	}
 
-	stdOut := new(bytes.Buffer)
-	java.create(stdOut, r, tmp)
+	java.create(r, tmp)
 
-	file, err := ioutil.ReadFile("./test/java/impl.java")
+	act, err := ioutil.ReadFile("TestTest.java")
+	if err != nil {
+		t.Error(err)
+	}
+	exp, err := ioutil.ReadFile("./test/java/impl.java")
 	if err != nil {
 		t.Error(err)
 	}
 
-	if string(file) != stdOut.String() {
-		t.Error("create template file failed")
+	if string(exp) != string(act) {
+		t.Error("create template exp failed")
 	}
+
+	if err := os.Remove("TestTest.java"); err != nil {
+		t.Error(err)
+	}
+	
 }
 
 func TestCreateParts(t *testing.T) {
@@ -115,7 +123,7 @@ func create() Parts {
 
 	return Parts{
 		Package: "house",
-		Class:   "Watch",
+		Class:   "Test",
 		Methods: m,
 		Injects: i,
 	}
