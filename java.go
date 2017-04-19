@@ -1,10 +1,10 @@
 package main
 
 import (
-	"io"
 	"text/template"
 
 	"github.com/BurntSushi/toml"
+	"os"
 )
 
 type Java struct {
@@ -19,12 +19,16 @@ type Parts struct {
 	Injects []string
 }
 
-func (j *Java) create(w io.Writer, r string, t *template.Template) error {
+func (j *Java) create(r string, t *template.Template) error {
 	parts, err := createParts(r)
 	if err != nil {
 		return err
 	}
-	return t.Execute(w, parts)
+	file, err := os.Create(parts.Class + "Test.java")
+	if err != nil {
+		return err
+	}
+	return t.Execute(file, parts)
 }
 
 func createParts(r string) (Parts, error) {

@@ -3,7 +3,6 @@ package main
 import (
 	"errors"
 	"flag"
-	"io"
 	"io/ioutil"
 	"log"
 	"os"
@@ -11,21 +10,20 @@ import (
 )
 
 type Language interface {
-	create(w io.Writer, r string, t *template.Template) error
+	create(r string, t *template.Template) error
 }
 
 type Config struct {
 	resource string
 	temp     string
-	w        string
 }
 
 type Parser struct {
 	Language Language
 }
 
-func (p *Parser) Do(w io.Writer, r string, t *template.Template) error {
-	return p.Language.create(w, r, t)
+func (p *Parser) Do(r string, t *template.Template) error {
+	return p.Language.create(r, t)
 }
 
 var c Config
@@ -59,12 +57,7 @@ func run(lang string) error {
 		return err
 	}
 
-	w, err := os.Create(c.w)
-	if err != nil {
-		return err
-	}
-
-	return parser.Do(w, string(r), t)
+	return parser.Do(string(r), t)
 }
 
 func switchLang(lang string) (Language, Config, error) {
@@ -74,7 +67,6 @@ func switchLang(lang string) (Language, Config, error) {
 	switch lang {
 	case "java":
 		config.temp = "./template/java/test.java"
-		config.w = "./result/result.java"
 		return &Java{}, config, nil
 	default:
 		return nil, Config{}, errors.New("Not Compatible. Language: " + lang)
