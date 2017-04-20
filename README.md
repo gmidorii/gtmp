@@ -17,5 +17,12 @@ run
 % ./gtmp -l [language]
 ```
 
+### File placement
+resource file
+- resource/xxx/base.toml
+
+template file
+- template/xxx/[FILE NAME].xxx
+
 ## Template supported lang
 - Java Test
