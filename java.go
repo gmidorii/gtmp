@@ -3,15 +3,18 @@ package main
 import (
 	"text/template"
 
-	"github.com/BurntSushi/toml"
 	"os"
+
+	"github.com/BurntSushi/toml"
 )
 
+// Java is language struct
 type Java struct {
 	c    Config
 	part Parts
 }
 
+// Parts is template parameter
 type Parts struct {
 	Package string
 	Class   string

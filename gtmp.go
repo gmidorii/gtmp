@@ -9,19 +9,23 @@ import (
 	"text/template"
 )
 
+// Language is base interface
 type Language interface {
 	create(r string, t *template.Template) error
 }
 
+// Config is config file struct
 type Config struct {
 	resource string
 	temp     string
 }
 
+// Parser is language parser struct
 type Parser struct {
 	Language Language
 }
 
+// Do is create file from template and resource
 func (p *Parser) Do(r string, t *template.Template) error {
 	return p.Language.create(r, t)
 }
