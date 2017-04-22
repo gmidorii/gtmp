@@ -16,3 +16,6 @@ result/*
 
 # vs code debug binary
 debug
+
+# golang converage file
+coverage.out
