@@ -2,10 +2,9 @@ package main
 
 import (
 	"io/ioutil"
-	"log"
+	"os"
 	"testing"
 	"text/template"
-	"os"
 )
 
 func TestCreate(t *testing.T) {
@@ -17,10 +16,10 @@ func TestCreate(t *testing.T) {
 		part: create(),
 	}
 
-	r, _ := readResource(c.resource)
-	tmp, err := template.ParseFiles(c.temp)
+	r, _ := readResource(java.c.resource)
+	tmp, err := template.ParseFiles(java.c.temp)
 	if err != nil {
-		log.Fatal(err)
+		t.Error(err)
 	}
 
 	java.create(r, tmp)
@@ -41,7 +40,7 @@ func TestCreate(t *testing.T) {
 	if err := os.Remove("TestTest.java"); err != nil {
 		t.Error(err)
 	}
-	
+
 }
 
 func TestCreateParts(t *testing.T) {
