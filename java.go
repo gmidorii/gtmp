@@ -20,6 +20,7 @@ type Parts struct {
 	Class   string
 	Methods []string
 	Injects []string
+	Fields  []string
 }
 
 func (j *Java) create(r string, t *template.Template) error {
