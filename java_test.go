@@ -71,6 +71,11 @@ func TestCreateParts(t *testing.T) {
 		t.Log(expected)
 		t.Log(actual)
 	}
+	if !equalSlice(expected.Fields, actual.Fields) {
+		t.Error("create parts Fields failed")
+		t.Log(expected)
+		t.Log(actual)
+	}
 }
 
 func TestEqualSliceEqual(t *testing.T) {
@@ -120,10 +125,16 @@ func create() Parts {
 		"HogeClientImpl",
 	}
 
+	f := []string{
+		"test",
+		"hogeClient",
+	}
+
 	return Parts{
 		Package: "house",
 		Class:   "Test",
 		Methods: m,
 		Injects: i,
+		Fields:  f,
 	}
 }

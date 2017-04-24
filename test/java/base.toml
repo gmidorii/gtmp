@@ -8,3 +8,7 @@ injects = [
   "TestImpl",
   "HogeClientImpl"
 ]
+fields = [
+  "test",
+  "hogeClient"
+]
